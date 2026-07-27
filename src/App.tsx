@@ -15,7 +15,7 @@ import { store } from './services/store';
 
 export function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return Boolean(store.currentUserId);
+    return Boolean(store.currentUserId && store.currentUserId.length > 0);
   });
   const [currentTab, setCurrentTab] = useState('painel');
   const [, setTick] = useState(0);
@@ -37,7 +37,7 @@ export function App() {
 
   // Atualização dinâmica do Título do Navegador (<title>)
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !store.currentUserId) {
       document.title = 'Login | RAHNAG';
       return;
     }
@@ -59,10 +59,8 @@ export function App() {
   }, [currentTab, isAuthenticated]);
 
   const handleLogout = () => {
+    store.logout();
     setIsAuthenticated(false);
-    store.currentUserId = '';
-    store.activeTenantId = '';
-    store.saveToStorage();
     document.title = 'Login | RAHNAG';
     refreshState();
   };
@@ -72,8 +70,8 @@ export function App() {
     refreshState();
   };
 
-  // 1. Se não estiver autenticado -> Forçar tela de Login
-  if (!isAuthenticated) {
+  // 1. Se não estiver autenticado -> Forçar tela de Login RAHNAG
+  if (!isAuthenticated || !store.currentUserId) {
     return (
       <>
         <LoginView onLoginSuccess={handleLoginSuccess} />

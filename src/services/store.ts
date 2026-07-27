@@ -85,10 +85,10 @@ class AppStore {
       this.auditLogs = savedLogs ? JSON.parse(savedLogs) : INITIAL_AUDIT_LOGS;
 
       const savedActiveTenant = localStorage.getItem('vta_active_tenant');
-      this.activeTenantId = savedActiveTenant || (this.tenants[0]?.id || '');
+      this.activeTenantId = savedActiveTenant !== null ? savedActiveTenant : (this.tenants[0]?.id || '');
 
       const savedCurrentUser = localStorage.getItem('vta_current_user');
-      this.currentUserId = savedCurrentUser || (this.users[0]?.id || '');
+      this.currentUserId = savedCurrentUser !== null ? savedCurrentUser : '';
     } catch (e) {
       this.tenants = INITIAL_TENANTS;
       this.users = INITIAL_USERS;
@@ -99,8 +99,8 @@ class AppStore {
       this.matches = INITIAL_MATCHES;
       this.insights = INITIAL_INSIGHTS;
       this.auditLogs = INITIAL_AUDIT_LOGS;
-      this.activeTenantId = INITIAL_TENANTS[0]?.id || '';
-      this.currentUserId = INITIAL_USERS[0]?.id || '';
+      this.activeTenantId = '';
+      this.currentUserId = '';
     }
   }
 
@@ -116,6 +116,14 @@ class AppStore {
     localStorage.setItem('vta_audit', JSON.stringify(this.auditLogs));
     localStorage.setItem('vta_active_tenant', this.activeTenantId);
     localStorage.setItem('vta_current_user', this.currentUserId);
+  }
+
+  logout() {
+    this.currentUserId = '';
+    this.activeTenantId = '';
+    localStorage.setItem('vta_current_user', '');
+    localStorage.setItem('vta_active_tenant', '');
+    this.saveToStorage();
   }
 
   // Método para criar uma nova conta de Admin e um time 100% ZERADO
