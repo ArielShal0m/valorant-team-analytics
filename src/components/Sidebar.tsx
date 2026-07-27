@@ -4,9 +4,10 @@ import { store } from '../services/store';
 interface SidebarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
+  onLogout: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab, onLogout }) => {
   const currentUser = store.users.find(u => u.id === store.currentUserId) || store.users[0];
   const currentMember = store.members.find(
     m => m.tenantId === store.activeTenantId && m.userId === currentUser.id
@@ -68,7 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab }) =
         })}
       </nav>
 
-      {/* User Profile Widget at Bottom */}
+      {/* User Profile Widget at Bottom with Logout Action */}
       <div className="px-5 pt-4 border-t border-[#ccc3d8]">
         <div className="flex items-center gap-3 p-2.5 rounded-lg bg-[#f3ebfa] border border-[#e8dfee]">
           <div className="w-8 h-8 rounded-full bg-[#eaddff] flex items-center justify-center text-[#630ed4] font-bold text-xs">
@@ -76,11 +77,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab }) =
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-bold text-[#1d1a24] truncate">{currentUser.fullName}</p>
-            <p className="text-[10px] text-[#4a4455] truncate">{roleLabels[currentMember?.role || 'PLAYER']}</p>
+            <p className="text-[10px] text-[#630ed4] font-semibold truncate">{roleLabels[currentMember?.role || 'PLAYER']}</p>
           </div>
-          <span className="material-symbols-outlined text-[#7b7487] text-sm cursor-pointer hover:text-[#630ed4]">
-            logout
-          </span>
+          <button
+            onClick={onLogout}
+            title="Sair da conta"
+            className="p-1 rounded hover:bg-[#e3e1ed] text-[#7b7487] hover:text-[#ba1a1a] transition-colors"
+          >
+            <span className="material-symbols-outlined text-sm">logout</span>
+          </button>
         </div>
       </div>
 
