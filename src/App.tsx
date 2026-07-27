@@ -10,10 +10,13 @@ import { InsightsView } from './components/InsightsView';
 import { ConteudosView } from './components/ConteudosView';
 import { InviteAcceptModal } from './components/InviteAcceptModal';
 import { LoginView } from './components/LoginView';
+import { UnassignedUserView } from './components/UnassignedUserView';
 import { store } from './services/store';
 
 export function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return Boolean(store.currentUserId);
+  });
   const [currentTab, setCurrentTab] = useState('painel');
   const [, setTick] = useState(0);
   const [inviteToken, setInviteToken] = useState<string | null>(null);
@@ -32,10 +35,35 @@ export function App() {
     }
   }, []);
 
+  // Atualização dinâmica do Título do Navegador (<title>)
+  useEffect(() => {
+    if (!isAuthenticated) {
+      document.title = 'Login | RAHNAG';
+      return;
+    }
+
+    const tabTitles: Record<string, string> = {
+      painel: 'Painel | RAHNAG',
+      partidas: 'Partidas | RAHNAG',
+      mapas: 'Mapas | RAHNAG',
+      jogadores: 'Jogadores | RAHNAG',
+      'jogadores-perfil': 'Perfil do Jogador | RAHNAG',
+      treinamento: 'Treinamento | RAHNAG',
+      conteudos: 'Conteúdos | RAHNAG',
+      analises: 'Análises | RAHNAG',
+      equipe: 'Equipe | RAHNAG',
+      configuracoes: 'Configurações | RAHNAG'
+    };
+
+    document.title = tabTitles[currentTab] || 'RAHNAG';
+  }, [currentTab, isAuthenticated]);
+
   const handleLogout = () => {
     setIsAuthenticated(false);
     store.currentUserId = '';
+    store.activeTenantId = '';
     store.saveToStorage();
+    document.title = 'Login | RAHNAG';
     refreshState();
   };
 
@@ -44,14 +72,11 @@ export function App() {
     refreshState();
   };
 
-  // Se não estiver autenticado, exibe a tela de Login
+  // 1. Se não estiver autenticado -> Forçar tela de Login
   if (!isAuthenticated) {
     return (
       <>
-        <LoginView
-          onLoginSuccess={handleLoginSuccess}
-          onOpenInviteModal={() => setInviteToken('HD72KS')}
-        />
+        <LoginView onLoginSuccess={handleLoginSuccess} />
 
         {inviteToken && (
           <InviteAcceptModal
@@ -69,8 +94,18 @@ export function App() {
     );
   }
 
-  const tabTitles: Record<string, string> = {
-    painel: 'Dashboard',
+  // 2. Verificar se o usuário autenticado pertence a alguma equipe
+  const currentUser = store.users.find(u => u.id === store.currentUserId);
+  const currentMember = store.members.find(
+    m => m.userId === currentUser?.id && m.tenantId === store.activeTenantId
+  ) || store.members.find(m => m.userId === currentUser?.id);
+
+  if (currentUser && !currentMember) {
+    return <UnassignedUserView onLogout={handleLogout} />;
+  }
+
+  const tabHeaderTitles: Record<string, string> = {
+    painel: 'Painel',
     partidas: 'Partidas',
     mapas: 'Mapas',
     jogadores: 'Jogadores',
@@ -96,7 +131,7 @@ export function App() {
       <div className="flex-1 flex flex-col min-w-0">
         
         {/* TopAppBar Fixo (64px) */}
-        <Header title={tabTitles[currentTab] || 'Dashboard'} onRefreshState={refreshState} />
+        <Header title={tabHeaderTitles[currentTab] || 'Painel'} onRefreshState={refreshState} />
 
         {/* Canvas de Conteúdo com pt-24 (espaço desobstruído abaixo do header fixo) */}
         <main className="ml-[260px] pt-24 pb-12 px-6 md:px-8 min-h-screen flex-1 max-w-7xl w-full mx-auto space-y-8 overflow-x-hidden">
