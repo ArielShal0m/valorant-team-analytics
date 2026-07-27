@@ -1,36 +1,8 @@
 import type { Tenant, User, TeamMember, Invite, PlayerProfile, Match, TrainingSession, Insight, AuditLog } from '../types';
 
-const INITIAL_TENANTS: Tenant[] = [
-  {
-    id: 'tenant_alpha_vct',
-    name: 'Equipe Alpha Esports',
-    slug: 'alpha-esports',
-    logoEmoji: 'sports_esports',
-    primaryColor: '#630ed4',
-    createdAt: '2026-01-10T10:00:00Z'
-  }
-];
-
-const INITIAL_USERS: User[] = [
-  {
-    id: 'usr_org_1',
-    email: 'organizador@alpha.gg',
-    fullName: 'Felipe Silva',
-    createdAt: '2026-01-10T10:00:00Z'
-  }
-];
-
-const INITIAL_MEMBERS: TeamMember[] = [
-  {
-    id: 'tm_1',
-    tenantId: 'tenant_alpha_vct',
-    userId: 'usr_org_1',
-    user: INITIAL_USERS[0],
-    role: 'ORGANIZER',
-    joinedAt: '2026-01-10T10:00:00Z'
-  }
-];
-
+const INITIAL_TENANTS: Tenant[] = [];
+const INITIAL_USERS: User[] = [];
+const INITIAL_MEMBERS: TeamMember[] = [];
 const INITIAL_PROFILES: PlayerProfile[] = [];
 const INITIAL_INVITES: Invite[] = [];
 const INITIAL_TRAINING_SESSIONS: TrainingSession[] = [];
@@ -61,10 +33,13 @@ class AppStore {
       this.tenants = savedTenants ? JSON.parse(savedTenants) : INITIAL_TENANTS;
 
       const savedUsers = localStorage.getItem('vta_users');
-      this.users = savedUsers ? JSON.parse(savedUsers) : INITIAL_USERS;
+      let rawUsers: User[] = savedUsers ? JSON.parse(savedUsers) : INITIAL_USERS;
+      // Expurgar usuário antigo de teste Felipe Silva
+      this.users = rawUsers.filter(u => u.id !== 'usr_org_1' && u.fullName !== 'Felipe Silva');
 
       const savedMembers = localStorage.getItem('vta_members');
-      this.members = savedMembers ? JSON.parse(savedMembers) : INITIAL_MEMBERS;
+      let rawMembers: TeamMember[] = savedMembers ? JSON.parse(savedMembers) : INITIAL_MEMBERS;
+      this.members = rawMembers.filter(m => m.userId !== 'usr_org_1');
 
       const savedInvites = localStorage.getItem('vta_invites');
       this.invites = savedInvites ? JSON.parse(savedInvites) : INITIAL_INVITES;
@@ -85,10 +60,15 @@ class AppStore {
       this.auditLogs = savedLogs ? JSON.parse(savedLogs) : INITIAL_AUDIT_LOGS;
 
       const savedActiveTenant = localStorage.getItem('vta_active_tenant');
-      this.activeTenantId = savedActiveTenant !== null ? savedActiveTenant : (this.tenants[0]?.id || '');
+      this.activeTenantId = savedActiveTenant !== null && savedActiveTenant !== 'tenant_alpha_vct' ? savedActiveTenant : (this.tenants[0]?.id || '');
 
       const savedCurrentUser = localStorage.getItem('vta_current_user');
-      this.currentUserId = savedCurrentUser !== null ? savedCurrentUser : '';
+      if (savedCurrentUser && savedCurrentUser !== 'usr_org_1') {
+        this.currentUserId = savedCurrentUser;
+      } else {
+        this.currentUserId = '';
+        this.activeTenantId = '';
+      }
     } catch (e) {
       this.tenants = INITIAL_TENANTS;
       this.users = INITIAL_USERS;
@@ -126,7 +106,7 @@ class AppStore {
     this.saveToStorage();
   }
 
-  // Método para criar uma nova conta de Admin e um time 100% ZERADO
+  // Método para criar a conta do Administrador Real da RAHNAG
   createNewAdminAndTenant(adminName: string, email: string, teamName: string) {
     const tenantId = `tenant_${Date.now()}`;
     const userId = `usr_admin_${Date.now()}`;
@@ -174,7 +154,7 @@ class AppStore {
     this.activeTenantId = tenantId;
     this.currentUserId = userId;
 
-    this.logAudit(userId, adminName, 'TIME_CRIADO', `Criou a equipe ${teamName} (Ambiente 100% Zerado).`);
+    this.logAudit(userId, adminName, 'ADMIN_CRIADO', `Criou a conta de Administrador RAHNAG e a equipe ${teamName}.`);
     this.saveToStorage();
 
     return { user: newUser, tenant: newTenant, member: newMember };
