@@ -8,14 +8,6 @@ const INITIAL_TENANTS: Tenant[] = [
     logoEmoji: 'sports_esports',
     primaryColor: '#630ed4',
     createdAt: '2026-01-10T10:00:00Z'
-  },
-  {
-    id: 'tenant_beta_challengers',
-    name: 'Equipe Beta Academy',
-    slug: 'beta-academy',
-    logoEmoji: 'shield',
-    primaryColor: '#2563EB',
-    createdAt: '2026-02-01T14:30:00Z'
   }
 ];
 
@@ -25,24 +17,6 @@ const INITIAL_USERS: User[] = [
     email: 'organizador@alpha.gg',
     fullName: 'Felipe Silva',
     createdAt: '2026-01-10T10:00:00Z'
-  },
-  {
-    id: 'usr_player_1',
-    email: 'pedro@alpha.gg',
-    fullName: 'Pedro Santos',
-    createdAt: '2026-01-11T12:00:00Z'
-  },
-  {
-    id: 'usr_player_2',
-    email: 'lucas@alpha.gg',
-    fullName: 'Lucas Lima',
-    createdAt: '2026-01-12T14:00:00Z'
-  },
-  {
-    id: 'usr_coach_1',
-    email: 'coach@alpha.gg',
-    fullName: 'Matheus Oliveira',
-    createdAt: '2026-01-13T09:00:00Z'
   }
 ];
 
@@ -54,233 +28,15 @@ const INITIAL_MEMBERS: TeamMember[] = [
     user: INITIAL_USERS[0],
     role: 'ORGANIZER',
     joinedAt: '2026-01-10T10:00:00Z'
-  },
-  {
-    id: 'tm_2',
-    tenantId: 'tenant_alpha_vct',
-    userId: 'usr_player_1',
-    user: INITIAL_USERS[1],
-    role: 'PLAYER',
-    joinedAt: '2026-01-11T12:00:00Z'
-  },
-  {
-    id: 'tm_3',
-    tenantId: 'tenant_alpha_vct',
-    userId: 'usr_player_2',
-    user: INITIAL_USERS[2],
-    role: 'PLAYER',
-    joinedAt: '2026-01-12T14:00:00Z'
-  },
-  {
-    id: 'tm_4',
-    tenantId: 'tenant_alpha_vct',
-    userId: 'usr_coach_1',
-    user: INITIAL_USERS[3],
-    role: 'COACH',
-    joinedAt: '2026-01-13T09:00:00Z'
   }
 ];
 
-const INITIAL_PROFILES: PlayerProfile[] = [
-  {
-    id: 'prof_1',
-    tenantId: 'tenant_alpha_vct',
-    teamMemberId: 'tm_2',
-    nickname: 'Pedro',
-    primaryAgent: 'Omen',
-    riotAccount: {
-      id: 'riot_1',
-      playerProfileId: 'prof_1',
-      gameName: 'Pedro',
-      tagLine: 'BR1',
-      puuid: 'puuid_p1_brazil_123',
-      verifiedAt: '2026-01-11T13:00:00Z'
-    }
-  },
-  {
-    id: 'prof_2',
-    tenantId: 'tenant_alpha_vct',
-    teamMemberId: 'tm_3',
-    nickname: 'Lucas',
-    primaryAgent: 'Jett',
-    riotAccount: {
-      id: 'riot_2',
-      playerProfileId: 'prof_2',
-      gameName: 'Lucas',
-      tagLine: 'BR1',
-      puuid: 'puuid_p2_brazil_456',
-      verifiedAt: '2026-01-12T15:00:00Z'
-    }
-  }
-];
-
-const INITIAL_INVITES: Invite[] = [
-  {
-    id: 'inv_1',
-    tenantId: 'tenant_alpha_vct',
-    token: 'HD72KS',
-    role: 'PLAYER',
-    expiresAt: '2026-12-31T23:59:59Z',
-    status: 'PENDING',
-    createdByUserId: 'usr_org_1',
-    createdAt: '2026-01-15T10:00:00Z'
-  }
-];
-
-const INITIAL_TRAINING_SESSIONS: TrainingSession[] = [
-  {
-    id: 'ts_1',
-    tenantId: 'tenant_alpha_vct',
-    playerProfileId: 'prof_1',
-    playerName: 'Pedro',
-    startedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-    endedAt: new Date(Date.now() - 3600000 * 0.5).toISOString(),
-    durationMinutes: 90,
-    status: 'COMPLETED',
-    focusAreas: ['Mata-mata', 'Mira', 'Movimentação'],
-    notes: 'Treino individual de aquecimento e controle de mira.'
-  },
-  {
-    id: 'ts_2',
-    tenantId: 'tenant_alpha_vct',
-    playerProfileId: 'prof_2',
-    playerName: 'Lucas',
-    startedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-    endedAt: new Date(Date.now() - 3600000 * 4.25).toISOString(),
-    durationMinutes: 45,
-    status: 'COMPLETED',
-    focusAreas: ['Mata-mata', 'Posicionamento']
-  }
-];
-
-const INITIAL_MATCHES: Match[] = [
-  {
-    id: 'm_1',
-    tenantId: 'tenant_alpha_vct',
-    riotMatchId: 'BR1_294019201',
-    mapName: 'Ascent',
-    durationSeconds: 2140,
-    mode: 'Competitivo',
-    isWin: true,
-    scoreTeam: 13,
-    scoreOpponent: 8,
-    playedAt: 'Hoje, 14:30',
-    players: [
-      {
-        id: 'mp_1',
-        matchId: 'm_1',
-        playerProfileId: 'prof_1',
-        playerName: 'Pedro',
-        agentPlayed: 'Omen',
-        kills: 22,
-        deaths: 11,
-        assists: 9,
-        acs: 268,
-        kastPercentage: 78,
-        firstKills: 4,
-        firstDeaths: 1
-      },
-      {
-        id: 'mp_2',
-        matchId: 'm_1',
-        playerProfileId: 'prof_2',
-        playerName: 'Lucas',
-        agentPlayed: 'Jett',
-        kills: 25,
-        deaths: 14,
-        assists: 3,
-        acs: 310,
-        kastPercentage: 74,
-        firstKills: 6,
-        firstDeaths: 2
-      }
-    ],
-    rounds: []
-  },
-  {
-    id: 'm_2',
-    tenantId: 'tenant_alpha_vct',
-    riotMatchId: 'BR1_294019202',
-    mapName: 'Bind',
-    durationSeconds: 2450,
-    mode: 'Competitivo',
-    isWin: false,
-    scoreTeam: 9,
-    scoreOpponent: 13,
-    playedAt: 'Ontem, 20:15',
-    players: [],
-    rounds: []
-  },
-  {
-    id: 'm_3',
-    tenantId: 'tenant_alpha_vct',
-    riotMatchId: 'BR1_294019203',
-    mapName: 'Haven',
-    durationSeconds: 2280,
-    mode: 'Treino Tático',
-    isWin: true,
-    scoreTeam: 13,
-    scoreOpponent: 11,
-    playedAt: '25/07/2026',
-    players: [],
-    rounds: []
-  }
-];
-
-const INITIAL_INSIGHTS: Insight[] = [
-  {
-    id: 'ins_1',
-    tenantId: 'tenant_alpha_vct',
-    severity: 'CRITICAL',
-    category: 'Rounds de Pistol',
-    title: 'Baixo aproveitamento nos Pistol Rounds',
-    description: 'Nas últimas 10 partidas, a equipe venceu apenas 31% dos pistol rounds.',
-    recommendedAction: 'Treinar execuções lentas de pistol no Ataque com utilitários.',
-    createdAt: '2026-07-27T10:00:00Z'
-  },
-  {
-    id: 'ins_2',
-    tenantId: 'tenant_alpha_vct',
-    severity: 'WARNING',
-    category: 'Ataque em Ascent',
-    title: 'Queda no desempenho de Ataque na Ascent',
-    description: 'Seu desempenho no ataque da Ascent caiu 12% em relação às partidas anteriores.',
-    recommendedAction: 'Revisar a tomada de espaço do A Main antes da entrada do grupo.',
-    createdAt: '2026-07-26T15:30:00Z'
-  },
-  {
-    id: 'ins_3',
-    tenantId: 'tenant_alpha_vct',
-    severity: 'POSITIVE',
-    category: 'First Kills',
-    title: 'Alta conversão com First Kill',
-    description: 'Quando o time consegue a First Kill, vence 76% dos rounds.',
-    recommendedAction: 'Manter a agressividade inicial suportada por utilitários.',
-    createdAt: '2026-07-26T14:00:00Z'
-  },
-  {
-    id: 'ins_4',
-    tenantId: 'tenant_alpha_vct',
-    severity: 'CRITICAL',
-    category: 'Rounds em Vantagem',
-    title: 'Desperdício de Vantagem Numérica (5v3 / 4v2)',
-    description: 'O time perdeu 14 rounds nas últimas 20 partidas depois de abrir vantagem de dois jogadores.',
-    recommendedAction: 'Protocolo estrito de pós-plant: proibir peeks individuais isolados.',
-    createdAt: '2026-07-25T11:00:00Z'
-  }
-];
-
-const INITIAL_AUDIT_LOGS: AuditLog[] = [
-  {
-    id: 'log_1',
-    tenantId: 'tenant_alpha_vct',
-    actorUserId: 'usr_org_1',
-    actorName: 'Felipe Silva',
-    action: 'CONVITE_GERADO',
-    details: 'Gerou convite com código HD72KS para o cargo de Jogador',
-    createdAt: '2026-01-15T10:00:00Z'
-  }
-];
+const INITIAL_PROFILES: PlayerProfile[] = [];
+const INITIAL_INVITES: Invite[] = [];
+const INITIAL_TRAINING_SESSIONS: TrainingSession[] = [];
+const INITIAL_MATCHES: Match[] = [];
+const INITIAL_INSIGHTS: Insight[] = [];
+const INITIAL_AUDIT_LOGS: AuditLog[] = [];
 
 class AppStore {
   tenants: Tenant[] = [];
@@ -329,10 +85,10 @@ class AppStore {
       this.auditLogs = savedLogs ? JSON.parse(savedLogs) : INITIAL_AUDIT_LOGS;
 
       const savedActiveTenant = localStorage.getItem('vta_active_tenant');
-      this.activeTenantId = savedActiveTenant || INITIAL_TENANTS[0].id;
+      this.activeTenantId = savedActiveTenant || (this.tenants[0]?.id || '');
 
       const savedCurrentUser = localStorage.getItem('vta_current_user');
-      this.currentUserId = savedCurrentUser || INITIAL_USERS[0].id;
+      this.currentUserId = savedCurrentUser || (this.users[0]?.id || '');
     } catch (e) {
       this.tenants = INITIAL_TENANTS;
       this.users = INITIAL_USERS;
@@ -343,8 +99,8 @@ class AppStore {
       this.matches = INITIAL_MATCHES;
       this.insights = INITIAL_INSIGHTS;
       this.auditLogs = INITIAL_AUDIT_LOGS;
-      this.activeTenantId = INITIAL_TENANTS[0].id;
-      this.currentUserId = INITIAL_USERS[0].id;
+      this.activeTenantId = INITIAL_TENANTS[0]?.id || '';
+      this.currentUserId = INITIAL_USERS[0]?.id || '';
     }
   }
 
@@ -360,6 +116,60 @@ class AppStore {
     localStorage.setItem('vta_audit', JSON.stringify(this.auditLogs));
     localStorage.setItem('vta_active_tenant', this.activeTenantId);
     localStorage.setItem('vta_current_user', this.currentUserId);
+  }
+
+  // Método para criar uma nova conta de Admin e um time 100% ZERADO
+  createNewAdminAndTenant(adminName: string, email: string, teamName: string) {
+    const tenantId = `tenant_${Date.now()}`;
+    const userId = `usr_admin_${Date.now()}`;
+    const memberId = `tm_${Date.now()}`;
+    const profileId = `prof_${Date.now()}`;
+
+    const newTenant: Tenant = {
+      id: tenantId,
+      name: teamName.trim(),
+      slug: teamName.toLowerCase().replace(/\s+/g, '-'),
+      logoEmoji: 'sports_esports',
+      primaryColor: '#630ed4',
+      createdAt: new Date().toISOString()
+    };
+
+    const newUser: User = {
+      id: userId,
+      email: email.trim().toLowerCase(),
+      fullName: adminName.trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    const newMember: TeamMember = {
+      id: memberId,
+      tenantId: tenantId,
+      userId: userId,
+      user: newUser,
+      role: 'ORGANIZER',
+      joinedAt: new Date().toISOString()
+    };
+
+    const newProfile: PlayerProfile = {
+      id: profileId,
+      tenantId: tenantId,
+      teamMemberId: memberId,
+      nickname: adminName.trim().split(' ')[0],
+      primaryAgent: 'Omen'
+    };
+
+    this.tenants.unshift(newTenant);
+    this.users.unshift(newUser);
+    this.members.unshift(newMember);
+    this.profiles.unshift(newProfile);
+
+    this.activeTenantId = tenantId;
+    this.currentUserId = userId;
+
+    this.logAudit(userId, adminName, 'TIME_CRIADO', `Criou a equipe ${teamName} (Ambiente 100% Zerado).`);
+    this.saveToStorage();
+
+    return { user: newUser, tenant: newTenant, member: newMember };
   }
 
   logAudit(actorUserId: string, actorName: string, action: string, details: string) {
